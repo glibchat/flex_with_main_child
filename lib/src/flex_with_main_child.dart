@@ -40,22 +40,24 @@ class _FlexWithMainChildState extends State<FlexWithMainChild> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      final double crossAxisSize;
+      double? crossAxisSize;
       if (widget.direction == Axis.vertical) {
-        crossAxisSize = (widget.mainChildKey.currentContext!.findRenderObject()!
-                as RenderBox)
-            .size
-            .width;
+        final box = widget.mainChildKey.currentContext?.findRenderObject();
+        if (box != null) {
+          crossAxisSize = (box as RenderBox).size.width;
+        }
       } else {
-        crossAxisSize = (widget.mainChildKey.currentContext!.findRenderObject()!
-                as RenderBox)
-            .size
-            .height;
+        final box = widget.mainChildKey.currentContext?.findRenderObject();
+        if (box != null) {
+          crossAxisSize = (box as RenderBox).size.height;
+        }
       }
-      if (this.crossAxisSize != crossAxisSize) {
-        setState(() {
-          this.crossAxisSize = crossAxisSize;
-        });
+      if (crossAxisSize != null) {
+        if (this.crossAxisSize != crossAxisSize) {
+          setState(() {
+            this.crossAxisSize = crossAxisSize;
+          });
+        }
       }
     });
     return SizedBox(
